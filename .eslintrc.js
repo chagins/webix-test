@@ -26,7 +26,7 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './config/typescript/tsconfig.eslint.json',
   },
   plugins: [
     '@typescript-eslint',
@@ -38,7 +38,7 @@ module.exports = {
     'promise',
   ],
   rules: {
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/no-extraneous-dependencies': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx'] }],
