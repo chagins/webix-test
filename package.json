@@ -16,8 +16,8 @@
     "lint:fix": "pnpm run lint:ts:fix && pnpm run lint:styles:fix && pnpm run prettier:fix",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",
     "lint:ts:fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "lint:styles": "stylelint --config .stylelintrc \"**/*.{css,scss}\"",
-    "lint:styles:fix": "stylelint --config .stylelintrc \"**/*.{css,scss}\" --fix",
+    "lint:styles": "stylelint --config .stylelintrc --ignore-path .stylelintignore \"**/*.{css,scss}\"",
+    "lint:styles:fix": "stylelint --config .stylelintrc --ignore-path .stylelintignore \"**/*.{css,scss}\" --fix",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,scss,json}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,scss,json}\"",
     "prepare": "husky install"
