@@ -1,0 +1,22 @@
+@import 'reset';
+@import 'variables/global';
+
+.app {
+  height: 100vh;
+}
+
+.navbar {
+  width: 100%;
+  height: var(--navbar-height);
+}
+
+.content-page {
+  display: flex;
+  height: calc(100% - var(--navbar-height));
+  flex-direction: column;
+}
+
+.page-wrapper {
+  flex-grow: 1;
+  padding: 20px;
+}
