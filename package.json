@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "18",
-    "pnpm": "9"
+    "node": "^18.12.0",
+    "pnpm": "8.15.8"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    "preinstall": "npm install -g pnpm@8.15.8 & npx only-allow pnpm",
     "start": "webpack serve --env port=3001",
     "build:prod": "webpack --env mode=production",
     "build:dev": "webpack --env mode=development",
@@ -16,8 +16,8 @@
     "lint:fix": "pnpm run lint:ts:fix && pnpm run lint:styles:fix && pnpm run prettier:fix",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",
     "lint:ts:fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "lint:styles": "stylelint --config .stylelintrc \"**/*.{css,scss}\"",
-    "lint:styles:fix": "stylelint --config .stylelintrc \"**/*.{css,scss}\" --fix",
+    "lint:styles": "stylelint --config .stylelintrc --ignore-path .stylelintignore \"**/*.{css,scss}\"",
+    "lint:styles:fix": "stylelint --config .stylelintrc --ignore-path .stylelintignore \"**/*.{css,scss}\" --fix",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,scss,json}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,scss,json}\"",
     "prepare": "husky install"
