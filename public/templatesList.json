@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Appendix 1 - IMF Demo Survey Form.xlsx",
+    "path": "/templates/Appendix 1 - IMF Demo Survey Form.xlsx",
+    "datatype": "excel",
+    "editableCells": [
+      {
+        "row": 6,
+        "column": 3
+      },
+      {
+        "row": 9,
+        "column": 4
+      }
+    ],
+    "rowCount": 20,
+    "columnCount": 10
+  },
+  {
+    "name": "Appendix 2.1 - IMF Demo Survey Form 2023Q1.GBCAAA.xlsx",
+    "path": "/templates/Appendix 2.1 - IMF Demo Survey Form 2023Q1.GBCAAA.xlsx",
+    "datatype": "excel"
+  },
+  {
+    "name": "Appendix 2.2 - IMF Demo Survey Form 2023Q1.GBCBBB.xlsx",
+    "path": "/templates/Appendix 2.2 - IMF Demo Survey Form 2023Q1.GBCBBB.xlsx",
+    "datatype": "excel"
+  }
+]
