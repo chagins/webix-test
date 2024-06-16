@@ -1,16 +1,23 @@
 import { Outlet } from 'react-router-dom';
 import { Navbar } from 'widgets/Navbar';
+import { Layout } from 'antd';
 import { IAppLayoutProps } from '../lib';
+
+import * as styles from './AppLayout.module.scss';
+
+const { Header, Content } = Layout;
 
 export const AppLayout = ({ className }: IAppLayoutProps) => {
   return (
-    <div className={className}>
-      <Navbar className="navbar" />
-      <main className="content-page">
-        <div className="page-wrapper">
+    <Layout className={className}>
+      <Header className={styles.Header}>
+        <Navbar className={styles.Navbar} />
+      </Header>
+      <Content className={styles.Content}>
+        <div className={styles.PageWrapper}>
           <Outlet />
         </div>
-      </main>
-    </div>
+      </Content>
+    </Layout>
   );
 };
