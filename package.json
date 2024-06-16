@@ -7,10 +7,18 @@
     "node": "^18.12.0",
     "pnpm": "8.15.8"
   },
-  "browserslist": [
-    "defaults and fully supports es6-module",
-    "maintained node versions"
-  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "scripts": {
     "preinstall": "npm install -g pnpm@8.15.8 & npx only-allow pnpm",
     "start": "webpack serve --env port=3001",
@@ -47,6 +55,7 @@
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.12.0",
     "@typescript-eslint/parser": "^7.12.0",
+    "browserslist": "^4.23.1",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.0",
