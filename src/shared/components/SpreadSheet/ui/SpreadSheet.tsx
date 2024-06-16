@@ -1,57 +1,64 @@
-import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { ISpreadSheetProps } from '../lib';
+import { useEffect, useRef, memo } from 'react';
+import { ISpreadSheetProps, prepareImportFileInfo } from '../lib';
 
-export const SpreadSheet = forwardRef<webix.ui.spreadsheet, ISpreadSheetProps>(
-  (props: ISpreadSheetProps, ref) => {
-    const { data, className } = props;
-    const sheets = useRef<null | webix.ui.spreadsheet>(null);
-    const container = useRef<HTMLDivElement>(null);
+import './SpreadSheet.scss';
 
-    useEffect(() => {
-      webix.ready(() => {
-        if (!sheets.current) {
-          sheets.current = webix.ui<webix.ui.spreadsheet>({
-            id: 'spreadsheet1',
-            view: 'spreadsheet',
-            toolbar: 'full',
-            container: container.current,
-            data,
-          });
+export const SpreadSheet = memo((props: ISpreadSheetProps) => {
+  const { data, className, onInit, importFileInfo } = props;
+  const sheets = useRef<null | webix.ui.spreadsheet>(null);
+  const container = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    webix.ready(() => {
+      const fileInfo = importFileInfo && prepareImportFileInfo(importFileInfo);
+
+      if (!sheets.current) {
+        sheets.current = webix.ui<webix.ui.spreadsheet>({
+          id: 'spreadsheet1',
+          view: 'spreadsheet',
+          toolbar: 'full',
+          container: container.current,
+          data,
+          ...fileInfo,
+          math: true,
+          spans: true,
+        });
+
+        if (onInit) {
+          onInit(sheets.current);
         }
-      });
-
-      return () => {
-        if (sheets.current) {
-          sheets.current.destructor();
-          sheets.current = null;
-        }
-      };
-    }, [data]);
-
-    useEffect(() => {
-      const resizeObserver = new ResizeObserver(() => {
-        if (sheets.current) {
-          sheets.current.adjust();
-        }
-      });
-
-      if (container.current) {
-        resizeObserver.observe(container.current);
       }
+    });
 
-      return () => {
-        if (sheets.current) {
-          sheets.current.destructor();
-          sheets.current = null;
-        }
-        resizeObserver.disconnect();
-      };
-    }, []);
+    return () => {
+      if (sheets.current) {
+        sheets.current.destructor();
+        sheets.current = null;
+      }
+    };
+  }, [data, importFileInfo, onInit]);
 
-    useImperativeHandle(ref, () => sheets.current!, []);
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      if (sheets.current) {
+        sheets.current.adjust();
+      }
+    });
 
-    return <div ref={container} className={className} />;
-  }
-);
+    if (container.current) {
+      resizeObserver.observe(container.current);
+    }
+
+    return () => {
+      if (sheets.current) {
+        sheets.current.destructor();
+        sheets.current = null;
+      }
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  return <div ref={container} className={className} />;
+});
 
 SpreadSheet.displayName = 'SpreadSheet';
