@@ -7,6 +7,10 @@
     "node": "^18.12.0",
     "pnpm": "8.15.8"
   },
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    "maintained node versions"
+  ],
   "scripts": {
     "preinstall": "npm install -g pnpm@8.15.8 & npx only-allow pnpm",
     "start": "webpack serve --env port=3001",
@@ -26,12 +30,9 @@
     "type": "git",
     "url": "git+https://github.com/chagins/new-react-app-pnpm.git"
   },
-  "author": "",
+  "author": "@chagins",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/chagins/new-react-app/issues"
-  },
-  "homepage": "https://github.com/chagins/new-react-app#readme",
+  "private": true,
   "dependencies": {
     "classnames": "^2.5.1",
     "react": "^18.3.1",
