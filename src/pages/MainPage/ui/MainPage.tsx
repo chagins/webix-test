@@ -24,22 +24,6 @@ export const MainPage = ({ className }: IMainPageProps) => {
     }
   }, [currentTemplate, sheetInstance]);
 
-  useEffect(() => {
-    if (!currentTemplate || !sheetInstance) {
-      return;
-    }
-
-    const { sheets } = currentTemplate;
-
-    if (sheets && sheets.length) {
-      // sheetInstance.define({ columnCount, rowCount });
-      // sheetInstance.attachEvent('onAfterLoad', () => {
-      //   sheetInstance.lockCell({ row: 1, column: 1 }, { row: rowCount, column: columnCount }, true);
-      //   sheetInstance.lockCell(...editableCells, false);
-      // });
-    }
-  }, [currentTemplate, sheetInstance]);
-
   const onSpreadSheetInit = useCallback(
     (sheet: webix.ui.spreadsheet) => {
       setSheetInstance(sheet);

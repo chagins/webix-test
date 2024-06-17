@@ -30,23 +30,33 @@ export const ApplySheetConfig = ({ className }: ApplySheetConfigProps) => {
   }, [sheetInstance, currentTemplate]);
 
   const onApply = () => {
-    if (!currentSheetConfig) {
+    if (!currentSheetConfig || !sheetInstance) {
       return;
     }
 
     const { columnCount, rowCount, editableCells } = currentSheetConfig;
-
-    if (!sheetInstance) {
-      return;
-    }
+    const initialRowCount = sheetInstance.config.rowCount;
+    const initialColumnCount = sheetInstance.config.columnCount;
 
     sheetInstance.define({ columnCount, rowCount });
+    if (initialRowCount !== undefined && initialRowCount > rowCount) {
+      const startRowIndex = rowCount + 1;
+      const endRowIndex = initialRowCount;
+      sheetInstance.deleteRow([startRowIndex, endRowIndex]);
+    }
+
+    if (initialColumnCount !== undefined && initialColumnCount > columnCount) {
+      const startColIndex = columnCount + 1;
+      const endColIndex = initialColumnCount;
+      sheetInstance.deleteColumn([startColIndex, endColIndex]);
+    }
 
     if (editableCells) {
       sheetInstance.lockCell({ row: 1, column: 1 }, { row: rowCount, column: columnCount }, true);
       sheetInstance.lockCell(...editableCells, false);
     }
 
+    sheetInstance.adjust();
     sheetInstance.refresh();
   };
 
