@@ -10,24 +10,23 @@ export const ApplySheetConfig = ({ className }: ApplySheetConfigProps) => {
   const [currentSheetConfig, setCurrentSheetConfig] = useState<SheetConfig>();
 
   useEffect(() => {
-    if (!sheetInstance || !currentTemplate || !currentTemplate?.sheets) {
-      setIsDisabled(true);
-      return;
-    }
-
-    sheetInstance.attachEvent('onAfterLoad', () => {
+    sheetInstance?.attachEvent('onAfterLoad', () => {
       const activeSheetName = sheetInstance.getActiveSheet();
-      const { sheets } = currentTemplate;
-      const foundSheet = sheets?.find((sheet) => sheet.name === activeSheetName);
+
+      if (!currentTemplate || !currentTemplate.sheets) {
+        setIsDisabled(true);
+        return;
+      }
+
+      const foundSheet = currentTemplate.sheets.find((sheet) => sheet.name === activeSheetName);
 
       if (foundSheet?.config) {
         setCurrentSheetConfig(foundSheet.config);
+        setIsDisabled(false);
       } else {
         setIsDisabled(true);
       }
     });
-
-    setIsDisabled(false);
   }, [sheetInstance, currentTemplate]);
 
   const onApply = () => {
@@ -47,6 +46,8 @@ export const ApplySheetConfig = ({ className }: ApplySheetConfigProps) => {
       sheetInstance.lockCell({ row: 1, column: 1 }, { row: rowCount, column: columnCount }, true);
       sheetInstance.lockCell(...editableCells, false);
     }
+
+    sheetInstance.refresh();
   };
 
   return (
