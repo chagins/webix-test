@@ -10,14 +10,9 @@ export const SelectTemplate = ({ className }: SelectTemplateProps) => {
   const { fetchTemplateList, templateList, setCurrentTemplateIndex, currentTemplateIndex } =
     useSheet();
   const [options, setOptions] = useState<Option[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!templateList.length) {
-      setIsLoading(true);
-      fetchTemplateList();
-    } else {
-      setIsLoading(false);
+    if (templateList.length) {
       const loadedOptions = templateList.map((template, index) => ({
         value: index,
         label: template.name,
@@ -36,7 +31,6 @@ export const SelectTemplate = ({ className }: SelectTemplateProps) => {
       options={options}
       value={currentTemplateIndex}
       onChange={onChange}
-      loading={isLoading}
       placeholder="Select template"
       allowClear
     />
