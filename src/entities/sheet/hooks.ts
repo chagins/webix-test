@@ -9,6 +9,8 @@ export const useSheet = () => {
     setCurrentTemplateIndex,
     templatePath,
     currentTemplate,
+    sheetInstance,
+    setSheetInstance,
   } = useContext(SheetContext);
 
   const fetchTemplateList = useCallback(async (): Promise<FileInfo[] | null> => {
@@ -36,5 +38,7 @@ export const useSheet = () => {
     fetchTemplateList,
     templatePath,
     currentTemplate,
+    sheetInstance,
+    setSheetInstance,
   };
 };

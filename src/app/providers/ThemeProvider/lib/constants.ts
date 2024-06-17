@@ -8,6 +8,9 @@ export const defaultThemeData: ThemeConfig = {
       colorTextHeading: '#ffffff',
       titleMarginBottom: 0,
     },
+    Button: {
+      colorTextDisabled: '#aaaaaa',
+    },
   },
 };
 

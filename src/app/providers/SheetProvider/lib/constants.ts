@@ -7,6 +7,7 @@ export const initSheetData: SheetContextProps = {
   currentTemplateIndex: undefined,
   setCurrentTemplateIndex: () => -1,
   templatePath: '',
+  setSheetInstance: (_: webix.ui.spreadsheet) => {},
 };
 
 export const SheetContext = createContext<SheetContextProps>({ ...initSheetData });

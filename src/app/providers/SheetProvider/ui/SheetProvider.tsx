@@ -5,6 +5,7 @@ export const SheetProvider: React.FC<SheetProviderProps> = ({ children, template
   const [templateList, setTemplateList] = useState<FileInfo[]>([]);
   const [currentTemplateIndex, setCurrentTemplateIndex] = useState<number>();
   const [currentTemplate, setCurrentTemplate] = useState<FileInfo>();
+  const [sheetInstance, setSheetInstance] = useState<webix.ui.spreadsheet>();
 
   useEffect(() => {
     if (currentTemplateIndex !== undefined && Array.isArray(templateList) && templateList.length) {
@@ -20,8 +21,10 @@ export const SheetProvider: React.FC<SheetProviderProps> = ({ children, template
       setTemplateList,
       templatePath,
       currentTemplate,
+      sheetInstance,
+      setSheetInstance,
     }),
-    [currentTemplateIndex, templateList, templatePath, currentTemplate]
+    [currentTemplateIndex, templateList, templatePath, currentTemplate, sheetInstance]
   );
 
   return <SheetContext.Provider value={defaultProps}>{children}</SheetContext.Provider>;
