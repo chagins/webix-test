@@ -1,11 +1,12 @@
 import { Button } from 'antd';
-import { useSheet } from 'entities/sheet';
+import { SheetConfig, useSheet } from 'entities/sheet';
 import { useEffect, useState } from 'react';
-import { SheetConfig } from 'app/providers/SheetProvider';
+import { useSpreadSheetWidget } from 'shared/components/SpreadSheetWidget';
 import { ApplySheetConfigProps } from '../lib';
 
 export const ApplySheetConfig = ({ className }: ApplySheetConfigProps) => {
-  const { currentTemplate, sheetInstance } = useSheet();
+  const { currentTemplate } = useSheet();
+  const { instance: sheetInstance } = useSpreadSheetWidget();
   const [isDisabled, setIsDisabled] = useState(true);
   const [currentSheetConfig, setCurrentSheetConfig] = useState<SheetConfig>();
 

@@ -1,30 +1,51 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FileInfo, SheetContext, SheetContextProps, SheetProviderProps } from '../lib';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FileInfo, SheetContext, SheetContextType } from 'entities/sheet';
+import { SheetProviderProps } from '../lib';
 
 export const SheetProvider: React.FC<SheetProviderProps> = ({ children, templatePath }) => {
   const [templateList, setTemplateList] = useState<FileInfo[]>([]);
-  const [currentTemplateIndex, setCurrentTemplateIndex] = useState<number>();
-  const [currentTemplate, setCurrentTemplate] = useState<FileInfo>();
-  const [sheetInstance, setSheetInstance] = useState<webix.ui.spreadsheet>();
+  const [template, setTemplate] = useState<FileInfo | null>(null);
 
-  useEffect(() => {
-    if (currentTemplateIndex !== undefined && Array.isArray(templateList) && templateList.length) {
-      setCurrentTemplate(templateList[currentTemplateIndex]);
+  const fetchTemplateList = useCallback(async (): Promise<FileInfo[] | null> => {
+    try {
+      const response = await fetch(templatePath);
+      const files = (await response.json()) as FileInfo[];
+
+      if (!!files && Array.isArray(files) && !!files.length) {
+        setTemplateList(files);
+        return files;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Templates list download error', error);
+      return null;
     }
-  }, [currentTemplateIndex, templateList]);
+  }, [setTemplateList, templatePath]);
 
-  const defaultProps = useMemo<SheetContextProps>(
+  const setCurrentTemplate = useCallback(
+    (id: string) => {
+      if (!templateList.length) {
+        return;
+      }
+
+      const foundTemplate = templateList.find((item) => item.id === id);
+      if (foundTemplate) {
+        setTemplate(foundTemplate);
+      }
+    },
+    [templateList]
+  );
+
+  const defaultProps = useMemo<SheetContextType>(
     () => ({
-      currentTemplateIndex,
-      setCurrentTemplateIndex,
       templateList,
-      setTemplateList,
+      fetchTemplateList,
       templatePath,
-      currentTemplate,
-      sheetInstance,
-      setSheetInstance,
+      currentTemplate: template,
+      setCurrentTemplate,
     }),
-    [currentTemplateIndex, templateList, templatePath, currentTemplate, sheetInstance]
+    [fetchTemplateList, setCurrentTemplate, template, templateList, templatePath]
   );
 
   return <SheetContext.Provider value={defaultProps}>{children}</SheetContext.Provider>;
