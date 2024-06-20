@@ -1,39 +1,37 @@
 import classNames from 'classnames';
-import { useCallback, useEffect } from 'react';
-import { SpreadSheet, prepareImportFileInfo } from 'shared/components/SpreadSheet';
+import {
+  SpreadSheetWidget,
+  SpreadSheetDatatype,
+  useSpreadSheetWidget,
+} from 'shared/components/SpreadSheetWidget';
 import { useSheet } from 'entities/sheet';
+import { useEffect } from 'react';
 import { IMainPageProps } from '../lib';
 
 import * as styles from './MainPage.module.scss';
 
 export const MainPage = ({ className }: IMainPageProps) => {
-  const { currentTemplate, sheetInstance, setSheetInstance } = useSheet();
+  const { currentTemplate } = useSheet();
+  const { instance: sheetInstance, importExcelFile } = useSpreadSheetWidget();
 
   useEffect(() => {
     if (!currentTemplate || !sheetInstance) {
       return;
     }
 
-    const { url, datatype } = prepareImportFileInfo({
-      path: currentTemplate.path,
-      datatype: currentTemplate.datatype,
-    });
-
-    if (url && datatype) {
-      sheetInstance.load(url, datatype);
+    if (currentTemplate.datatype === SpreadSheetDatatype.EXCEL) {
+      importExcelFile(currentTemplate.path);
     }
-  }, [currentTemplate, sheetInstance]);
-
-  const onSpreadSheetInit = useCallback(
-    (sheet: webix.ui.spreadsheet) => {
-      setSheetInstance(sheet);
-    },
-    [setSheetInstance]
-  );
+  }, [currentTemplate, importExcelFile, sheetInstance]);
 
   return (
     <div className={classNames(className, styles.MainPage)}>
-      <SpreadSheet className={styles.Sheet} onInit={onSpreadSheetInit} />
+      <SpreadSheetWidget
+        className={styles.Sheet}
+        config={{
+          toolbar: 'full',
+        }}
+      />
     </div>
   );
 };

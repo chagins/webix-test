@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from 'app/App';
 import { ThemeProvider } from 'app/providers/ThemeProvider';
 import { SheetProvider } from 'app/providers/SheetProvider';
+import { SpreadSheetWidgetProvider } from 'app/providers/SpreadSheetWidgetProvider';
 
 import './index.scss';
 
@@ -16,7 +17,9 @@ if (rootElement) {
       <BrowserRouter>
         <ThemeProvider>
           <SheetProvider templatePath="/templatesList.json">
-            <App />
+            <SpreadSheetWidgetProvider>
+              <App />
+            </SpreadSheetWidgetProvider>
           </SheetProvider>
         </ThemeProvider>
       </BrowserRouter>

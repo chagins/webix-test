@@ -1,10 +1,12 @@
 import { Button } from 'antd';
 import { useSheet } from 'entities/sheet';
 import { useEffect, useState } from 'react';
+import { useSpreadSheetWidget } from 'shared/components/SpreadSheetWidget';
 import { LoadTemplatesProps } from '../lib';
 
 export const LoadTemplates = ({ className }: LoadTemplatesProps) => {
-  const { fetchTemplateList, sheetInstance } = useSheet();
+  const { fetchTemplateList } = useSheet();
+  const { instance: sheetInstance } = useSpreadSheetWidget();
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
