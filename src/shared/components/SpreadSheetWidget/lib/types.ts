@@ -5,6 +5,11 @@ export interface SpreadSheetWidgetProps {
   config?: SpreadSheetWidgetConfig;
 }
 
+export interface Cell {
+  row: number;
+  column: number;
+}
+
 export interface SpreadSheetWidgetContextType {
   instance: webix.ui.spreadsheet | null;
   setInstance: React.Dispatch<React.SetStateAction<webix.ui.spreadsheet | null>>;

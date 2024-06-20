@@ -3,8 +3,8 @@ export interface SelectTemplateProps {
 }
 
 export interface Option {
-  value: IndexValue;
+  value: IdValue;
   label: string;
 }
 
-export type IndexValue = number;
+export type IdValue = string;

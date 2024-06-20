@@ -1,10 +1,8 @@
 export interface SheetContextType {
   templateList: FileInfo[];
-  setTemplateList: (list: FileInfo[]) => void;
   fetchTemplateList: () => Promise<FileInfo[] | null>;
-  currentTemplateIndex: number | null;
-  setCurrentTemplateIndex: React.Dispatch<React.SetStateAction<number | null>>;
   currentTemplate: FileInfo | null;
+  setCurrentTemplate: (id: string) => void;
   templatePath: string | null;
 }
 
@@ -12,6 +10,7 @@ export interface FileInfo {
   name: string;
   path: string;
   datatype: string;
+  id: string;
   sheets?: Sheet[];
 }
 

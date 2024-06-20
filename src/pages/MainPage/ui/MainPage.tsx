@@ -14,15 +14,15 @@ export const MainPage = ({ className }: IMainPageProps) => {
   const { currentTemplate } = useSheet();
   const { instance: sheetInstance, importExcelFile } = useSpreadSheetWidget();
 
-  useEffect(() => {
-    if (!currentTemplate || !sheetInstance) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!currentTemplate || !sheetInstance) {
+  //     return;
+  //   }
 
-    if (currentTemplate.datatype === SpreadSheetDatatype.EXCEL) {
-      importExcelFile(currentTemplate.path);
-    }
-  }, [currentTemplate, importExcelFile, sheetInstance]);
+  //   if (currentTemplate.datatype === SpreadSheetDatatype.EXCEL) {
+  //     importExcelFile(currentTemplate.path);
+  //   }
+  // }, [currentTemplate, importExcelFile, sheetInstance]);
 
   return (
     <div className={classNames(className, styles.MainPage)}>

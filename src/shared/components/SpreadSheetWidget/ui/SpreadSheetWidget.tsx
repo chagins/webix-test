@@ -1,5 +1,11 @@
 import { useEffect, useRef, memo, useCallback } from 'react';
-import { SpreadSheetWidgetProps, SpreadSheetWidgetConfig, shallowCompareConfig } from '../lib';
+import {
+  SpreadSheetWidgetProps,
+  SpreadSheetWidgetConfig,
+  shallowCompareConfig,
+  OnChangeMode,
+  SpreadSheetWidgetData,
+} from '../lib';
 import { useSpreadSheetWidget } from '../hooks/useSpreadSheetWidget';
 
 import './SpreadSheetWidget.scss';
@@ -7,7 +13,7 @@ import './SpreadSheetWidget.scss';
 export const SpreadSheetWidget = memo((props: SpreadSheetWidgetProps) => {
   const { className, config } = props;
 
-  const { setInstance } = useSpreadSheetWidget();
+  const { setInstance, setData } = useSpreadSheetWidget();
   const containerRef = useRef<HTMLDivElement>(null);
   const spreadSheetRef = useRef<null | webix.ui.spreadsheet>(null);
 
@@ -23,6 +29,19 @@ export const SpreadSheetWidget = memo((props: SpreadSheetWidgetProps) => {
               ...initialConfig,
               view,
               container,
+              on: {
+                onAfterLoad: () => {
+                  const data =
+                    spreadSheetRef.current?.serialize({ sheets: true, math: true }) || null;
+                  setData(data as SpreadSheetWidgetData | null);
+                  console.log('onAfterLoad', { data });
+                },
+                onChange: (mode: OnChangeMode, name: string, oldName: string) => {
+                  const data = spreadSheetRef.current?.serialize({ sheets: true, math: true });
+                  setData(data as SpreadSheetWidgetData | null);
+                  console.log('onChange', { mode, name, data });
+                },
+              },
             });
             setInstance(spreadSheetRef.current);
           } catch (error) {
@@ -31,7 +50,7 @@ export const SpreadSheetWidget = memo((props: SpreadSheetWidgetProps) => {
         }
       });
     },
-    [setInstance]
+    [setInstance, setData]
   );
 
   useEffect(() => {
@@ -47,9 +66,11 @@ export const SpreadSheetWidget = memo((props: SpreadSheetWidgetProps) => {
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
-      if (spreadSheetRef.current && containerRef.current) {
-        spreadSheetRef.current.adjust();
-      }
+      setTimeout(() => {
+        if (spreadSheetRef.current && containerRef.current) {
+          spreadSheetRef.current.adjust();
+        }
+      }, 0);
     });
 
     if (containerRef.current) {

@@ -1,5 +1,5 @@
 export { SpreadSheetWidget } from './ui';
 export { SpreadSheetWidgetContext } from './model';
 export { useSpreadSheetWidget } from './hooks';
-export { SpreadSheetDatatype } from './lib';
-export type { SpreadSheetWidgetContextType, SpreadSheetWidgetData } from './lib';
+export { SpreadSheetDatatype, CellEditorType } from './lib';
+export type { SpreadSheetWidgetContextType, SpreadSheetWidgetData, Cell } from './lib';
