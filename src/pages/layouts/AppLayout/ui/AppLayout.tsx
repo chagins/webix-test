@@ -6,7 +6,7 @@ import { IAppLayoutProps } from '../lib';
 
 import * as styles from './AppLayout.module.scss';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
 export const AppLayout = ({ className }: IAppLayoutProps) => {
   return (

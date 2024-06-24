@@ -1,34 +1,85 @@
 import { Select } from 'antd';
-import { useSheet } from 'entities/sheet';
-import { useEffect, useState } from 'react';
+// import { useSheet } from 'entities/sheet';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { SpreadSheetDatatype, useSpreadSheetWidget } from 'shared/components/SpreadSheetWidget';
+import {
+  SpreadSheetDatatype,
+  SpreadSheetSerializeConfig /* useSpreadSheetWidget */,
+  SpreadSheetWidgetSheet,
+  useSpreadSheetWidgetStore,
+} from 'shared/components/SpreadSheetWidget';
+import { Template, TemplateId, useSheetStore } from 'entities/sheet';
 import { SelectTemplateProps, Option } from '../lib';
 
 import * as styles from './SelectTemplate.module.scss';
 
 export const SelectTemplate = ({ className }: SelectTemplateProps) => {
-  const { fetchTemplateList, templateList, currentTemplate, setCurrentTemplate } = useSheet();
-  const { importExcelFile } = useSpreadSheetWidget();
+  const spreadSheetWidget = useSpreadSheetWidgetStore.use.widgetInstance();
+  // const spreadSheetImportedData = useSpreadSheetWidgetStore.use.importedData();
+
+  const templates = useSheetStore.use.templates();
+  const updateCurrentTemplate = useSheetStore.use.updateCurrentTemplate();
+  const currentTemplate = useSheetStore.use.currentTemplate();
+  const templateData = useSheetStore.use.templateData();
+  const updateTemplateData = useSheetStore.use.updateTemplateData();
 
   const [options, setOptions] = useState<Option[]>([]);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    const loadedOptions = templateList?.map(({ name, id }) => ({
+    if (!spreadSheetWidget || !options.length) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [options.length, spreadSheetWidget]);
+
+  useEffect(() => {
+    if (!templates) {
+      return;
+    }
+
+    const loadedOptions = Object.values(templates)?.map(({ name, id }) => ({
       value: id,
       label: name,
     }));
     setOptions(loadedOptions);
-  }, [fetchTemplateList, templateList, templateList.length]);
+  }, [templates]);
 
-  useEffect(() => {
-    if (currentTemplate && currentTemplate.datatype === SpreadSheetDatatype.EXCEL) {
-      importExcelFile(currentTemplate.path);
+  const importExcelFile = useCallback(
+    async (importTemplate: Template) => {
+      // TODO: вынести в хуки или в хелперы, try catch
+
+      const { path } = importTemplate;
+      if (!spreadSheetWidget || !path) {
+        return;
+      }
+
+      const url = `binary->${path}`;
+      const dataType = SpreadSheetDatatype.EXCEL;
+
+      await spreadSheetWidget.load(url, dataType);
+    },
+    [spreadSheetWidget]
+  );
+
+  const onChange = (value: TemplateId) => {
+    updateCurrentTemplate(value);
+    const selectedTemplate = templates?.[value];
+
+    if (!selectedTemplate || !spreadSheetWidget) {
+      return;
     }
-  }, [currentTemplate, importExcelFile]);
 
-  const onChange = (value: string) => {
-    setCurrentTemplate(value);
+    const selectedTemplateData = templateData?.[selectedTemplate.id];
+
+    if (selectedTemplateData) {
+      spreadSheetWidget.parse({
+        sheets: Object.values(selectedTemplateData).map((sheet) => sheet),
+      });
+    } else {
+      importExcelFile(selectedTemplate);
+    }
   };
 
   return (
@@ -39,6 +90,7 @@ export const SelectTemplate = ({ className }: SelectTemplateProps) => {
       onChange={onChange}
       placeholder="Select template"
       allowClear
+      disabled={isDisabled}
     />
   );
 };

@@ -2,87 +2,112 @@ import { useEffect, useRef, memo, useCallback } from 'react';
 import {
   SpreadSheetWidgetProps,
   SpreadSheetWidgetConfig,
-  shallowCompareConfig,
-  OnChangeMode,
-  SpreadSheetWidgetData,
+  ChangeModes,
+  Cell,
+  SpreadSheetWidgetSheet,
+  SpreadSheetSerializeConfig,
 } from '../lib';
-import { useSpreadSheetWidget } from '../hooks/useSpreadSheetWidget';
 
 import './SpreadSheetWidget.scss';
+import { useSpreadSheetWidgetStore } from '../hooks';
 
-export const SpreadSheetWidget = memo((props: SpreadSheetWidgetProps) => {
-  const { className, config } = props;
+export const SpreadSheetWidget = memo(
+  (props: SpreadSheetWidgetProps) => {
+    const { className } = props;
 
-  const { setInstance, setData } = useSpreadSheetWidget();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const spreadSheetRef = useRef<null | webix.ui.spreadsheet>(null);
+    console.log('SpreadSheetWidget');
 
-  const initSpreadSheet = useCallback(
-    (initialConfig?: SpreadSheetWidgetConfig) => {
+    const updateWidgetInstance = useSpreadSheetWidgetStore.use.updateWidgetInstance();
+    const updateImportData = useSpreadSheetWidgetStore.use.updateImportData();
+    const updateData = useSpreadSheetWidgetStore.use.updateData();
+    const updateSelectedCells = useSpreadSheetWidgetStore.use.updateSelectedCells();
+    const updateActiveSheetName = useSpreadSheetWidgetStore.use.updateActiveSheetName();
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const spreadSheetRef = useRef<null | webix.ui.spreadsheet>(null);
+
+    const initSpreadSheet = useCallback(() => {
       webix.ready(() => {
         if (containerRef.current && !spreadSheetRef.current) {
           try {
-            const container = initialConfig?.container || containerRef.current;
+            const container = containerRef.current;
             const view = 'spreadsheet';
+            const config: SpreadSheetWidgetConfig = {
+              toolbar: 'full',
+            };
 
             spreadSheetRef.current = webix.ui<webix.ui.spreadsheet>({
-              ...initialConfig,
+              ...config,
               view,
               container,
               on: {
                 onAfterLoad: () => {
                   const data =
-                    spreadSheetRef.current?.serialize({ sheets: true, math: true }) || null;
-                  setData(data as SpreadSheetWidgetData | null);
+                    spreadSheetRef.current?.serialize(SpreadSheetSerializeConfig) || null;
+                  // updateImportData(data as SpreadSheetWidgetSheet[] | null);
+                  updateData(data as SpreadSheetWidgetSheet[] | null);
                   console.log('onAfterLoad', { data });
                 },
-                onChange: (mode: OnChangeMode, name: string, oldName: string) => {
-                  const data = spreadSheetRef.current?.serialize({ sheets: true, math: true });
-                  setData(data as SpreadSheetWidgetData | null);
+                onChange: (mode: ChangeModes, name: string, oldName: string) => {
+                  const data = spreadSheetRef.current?.serialize(SpreadSheetSerializeConfig);
+                  updateData(data as SpreadSheetWidgetSheet[] | null);
                   console.log('onChange', { mode, name, data });
+                },
+                onAfterSelect: (cells: Cell[]) => {
+                  updateSelectedCells(cells);
+                  console.log('onAfterSelect', { cells });
+                },
+                onAfterSheetShow: (sheetName: string) => {
+                  updateActiveSheetName(sheetName);
+                  console.log('onAfterSheetShow', { sheetName });
                 },
               },
             });
-            setInstance(spreadSheetRef.current);
+            updateWidgetInstance(spreadSheetRef.current);
           } catch (error) {
             console.error('Failed to initialize spreadsheet', error);
           }
         }
       });
-    },
-    [setInstance, setData]
-  );
+    }, [
+      updateData,
+      // updateImportData,
+      updateSelectedCells,
+      updateWidgetInstance,
+      updateActiveSheetName,
+    ]);
 
-  useEffect(() => {
-    initSpreadSheet(config);
+    useEffect(() => {
+      initSpreadSheet();
 
-    return () => {
-      if (spreadSheetRef.current) {
-        spreadSheetRef.current.destructor();
-        spreadSheetRef.current = null;
-      }
-    };
-  }, [config, initSpreadSheet]);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      setTimeout(() => {
-        if (spreadSheetRef.current && containerRef.current) {
-          spreadSheetRef.current.adjust();
+      return () => {
+        if (spreadSheetRef.current) {
+          spreadSheetRef.current.destructor();
+          spreadSheetRef.current = null;
         }
-      }, 0);
-    });
+      };
+    }, [initSpreadSheet]);
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
+    useEffect(() => {
+      const resizeObserver = new ResizeObserver(() => {
+        setTimeout(() => {
+          if (spreadSheetRef.current && containerRef.current) {
+            spreadSheetRef.current.adjust();
+          }
+        }, 0);
+      });
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
+      if (containerRef.current) {
+        resizeObserver.observe(containerRef.current);
+      }
 
-  return <div ref={containerRef} className={className} />;
-}, shallowCompareConfig);
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }, []);
+
+    return <div ref={containerRef} className={className} />;
+  } /* shallowCompareConfig */
+);
 
 SpreadSheetWidget.displayName = 'SpreadSheet';

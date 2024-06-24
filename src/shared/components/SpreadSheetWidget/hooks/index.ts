@@ -1,1 +1,1 @@
-export { useSpreadSheetWidget } from './useSpreadSheetWidget';
+export * from './useSpreadSheetWidgetStore';
