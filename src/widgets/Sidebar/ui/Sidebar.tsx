@@ -7,7 +7,7 @@ const { Sider } = Layout;
 
 export const Sidebar = () => {
   return (
-    <Sider className={styles.Sidebar} collapsible width={400} collapsedWidth={200}>
+    <Sider className={styles.Sidebar}>
       <Space className={styles.Container} direction="vertical">
         <SelectDimension />
       </Space>

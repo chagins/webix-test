@@ -2,7 +2,7 @@ export enum SpreadSheetDatatype {
   EXCEL = 'excel',
 }
 
-export enum OnChangeMode {
+export enum ChangeModes {
   'UPDATE' = 'update',
   'RENAME' = 'rename',
   'REMOVE' = 'remove',
@@ -18,3 +18,14 @@ export const SerializeConfig: webix.WebixSpreadsheetSerializeConfig = {
 export enum CellEditorType {
   'SS_RICHSELECT' = 'ss_richselect',
 }
+
+export enum SheetStates {
+  'VISIBLE' = 'visible',
+  'HIDDEN' = 'hidden',
+  'VERY_HIDDEN' = 'veryHidden',
+}
+
+export const SpreadSheetSerializeConfig: webix.WebixSpreadsheetSerializeConfig = {
+  math: true,
+  sheets: true,
+};

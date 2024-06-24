@@ -1,35 +1,77 @@
 import { Space, Tree, TreeProps, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { Cell, CellEditorType, useSpreadSheetWidget } from 'shared/components/SpreadSheetWidget';
-import { SelectDimensionProps, treeData } from '../lib';
+import {
+  Cell,
+  CellEditorType,
+  useSpreadSheetWidgetStore,
+} from 'shared/components/SpreadSheetWidget';
+import { Dimension, useSheetStore } from 'entities/sheet';
+import { SelectDimensionProps, getDimensionKeys, treeData } from '../lib';
 
 import * as styles from './SelectDimension.module.scss';
 
 const { Title } = Typography;
 
 export const SelectDimension = ({ className }: SelectDimensionProps) => {
+  const spreadSheetWidget = useSpreadSheetWidgetStore.use.widgetInstance();
+  const selectedCells = useSpreadSheetWidgetStore.use.selectedCells();
+  const activeSheetName = useSpreadSheetWidgetStore.use.activeSheetName();
+
+  const updateTemplateConfig = useSheetStore.use.updateTemplateConfigs();
+  const currentTemplate = useSheetStore.use.currentTemplate();
+  const templateConfigs = useSheetStore.use.templateConfigs();
+
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
-  const { instance } = useSpreadSheetWidget();
+  const [isDisabled, setIsDisabled] = useState(true);
 
-  const firstLevelKeys = treeData.map(({ key }) => key);
+  console.log('templateConfig', { templateConfigs });
 
   useEffect(() => {
-    if (!instance) {
+    if (!currentTemplate || !spreadSheetWidget) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [currentTemplate, spreadSheetWidget]);
+
+  useEffect(() => {
+    if (
+      !selectedCells?.length ||
+      !templateConfigs ||
+      !currentTemplate ||
+      !activeSheetName ||
+      !spreadSheetWidget
+    ) {
       return;
     }
 
-    instance.attachEvent('onAfterSelect', (cells: Cell[]) => {
-      const activeSheetName = instance.getActiveSheet();
+    const templateSheetConfigs = templateConfigs?.[currentTemplate.id];
+    const templateSheetConfig = templateSheetConfigs?.[activeSheetName];
+    const dimensions = templateSheetConfig?.dimensions;
 
-      instance.eachSelectedCell((cell: Cell) => {
-        const cellEditor = instance.getCellEditor(cell.row, cell.column);
-      });
-    });
-  }, [instance]);
+    // if (dimensions) {
+    //   dimensions.forEach(({ id, cell, values }) => {
+    //     const isCellsWithDimsExists = selectedCells.some(
+    //       (selectedCell) => selectedCell.row === cell.row && selectedCell.column === cell.column
+    //     );
+    //     if (isCellsWithDimsExists) {
+    //       setCheckedKeys((prevKeys) => {
+    //         const newKeys = prevKeys.filter((key) => key !== id);
+
+    //       });
+    //     } else {
+    //       setCheckedKeys((prevKeys) => {
+    //         const newKeys = prevKeys.filter((key) => key !== id);
+    //         return [...newKeys];
+    //       });
+    //     }
+    //   }, []);
+    // }
+  }, [activeSheetName, currentTemplate, selectedCells, spreadSheetWidget, templateConfigs]);
 
   const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
     setExpandedKeys(expandedKeysValue);
@@ -37,32 +79,49 @@ export const SelectDimension = ({ className }: SelectDimensionProps) => {
   };
 
   const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
-    console.log({ checkedKeysValue });
     setCheckedKeys(checkedKeysValue as React.Key[]);
 
-    if (!instance) {
+    if (!spreadSheetWidget) {
       return;
     }
 
-    const activeSheetName = instance.getActiveSheet();
-    instance.eachSelectedCell((cell: Cell) => {
-      console.log(instance.getCellValue(cell.row, cell.column, true, activeSheetName));
-      const allKeys = Array.isArray(checkedKeysValue) ? checkedKeysValue : [];
-      const childKeys = allKeys.filter((key) => !firstLevelKeys.includes(key));
+    const { dimensionIdKey, dimensionValuesKeys } = getDimensionKeys(checkedKeysValue, treeData);
+    const dimensions: Dimension[] = [];
 
-      if (childKeys.length) {
-        instance.setCellEditor(cell.row, cell.column, {
-          editor: CellEditorType.SS_RICHSELECT,
-          options: childKeys,
-        });
-      }
+    if (dimensionIdKey && activeSheetName && currentTemplate) {
+      spreadSheetWidget.eachSelectedCell((cell: Cell) => {
+        if (dimensionValuesKeys.length) {
+          spreadSheetWidget.setCellEditor(cell.row, cell.column, {
+            editor: CellEditorType.SS_RICHSELECT,
+            options: dimensionValuesKeys,
+          });
+          spreadSheetWidget.setCellValue(
+            cell.row,
+            cell.column,
+            dimensionValuesKeys[0],
+            activeSheetName
+          );
+          dimensions.push({
+            id: dimensionIdKey,
+            cell,
+            values: dimensionValuesKeys,
+          });
 
-      if (!childKeys.length) {
-        instance.setCellEditor(cell.row, cell.column, {
-          editor: '',
-        });
-      }
-    });
+          updateTemplateConfig(currentTemplate.id, activeSheetName, dimensions);
+        }
+
+        if (!dimensionValuesKeys.length) {
+          // TODO: доработать разные dimensions
+          const currentCellEditor = spreadSheetWidget.getCellEditor(cell.row, cell.column);
+
+          if (currentCellEditor) {
+            spreadSheetWidget.setCellEditor(cell.row, cell.column, {
+              editor: '',
+            });
+          }
+        }
+      });
+    }
   };
 
   const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
@@ -83,6 +142,7 @@ export const SelectDimension = ({ className }: SelectDimensionProps) => {
           onSelect={onSelect}
           selectedKeys={selectedKeys}
           treeData={treeData}
+          disabled={isDisabled}
         />
       </Space>
     </div>

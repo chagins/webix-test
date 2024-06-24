@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from 'app/App';
 import { ThemeProvider } from 'app/providers/ThemeProvider';
-import { SheetProvider } from 'app/providers/SheetProvider';
-import { SpreadSheetWidgetProvider } from 'app/providers/SpreadSheetWidgetProvider';
+// import { SheetProvider } from 'app/providers/SheetProvider';
 
 import './index.scss';
 
@@ -16,11 +15,9 @@ if (rootElement) {
     <React.StrictMode>
       <BrowserRouter>
         <ThemeProvider>
-          <SheetProvider templatePath="/templatesList.json">
-            <SpreadSheetWidgetProvider>
-              <App />
-            </SpreadSheetWidgetProvider>
-          </SheetProvider>
+          {/* <SheetProvider templatePath="/templatesList.json"> */}
+          <App />
+          {/* </SheetProvider> */}
         </ThemeProvider>
       </BrowserRouter>
     </React.StrictMode>

@@ -1,30 +1,56 @@
 import React from 'react';
+import { SheetStates } from '../constants';
 
 export interface SpreadSheetWidgetProps {
   className?: string;
-  config?: SpreadSheetWidgetConfig;
+  // onInit: (widget: webix.ui.spreadsheet) => void;
 }
 
+/** Cell types */
+
+type CellRowNumber = number;
+type CellColNumber = number;
 export interface Cell {
-  row: number;
-  column: number;
+  row: CellRowNumber;
+  column: CellColNumber;
 }
+
+export type LockCellCoord = LockCell | LockCellRange;
+export type LockCell = [CellRowNumber, CellColNumber, LockedState];
+export type LockCellRange = [Cell, Cell, LockedState];
+export type LockedState = boolean;
+
+// -------------------------------------------------------------
 
 export interface SpreadSheetWidgetContextType {
   instance: webix.ui.spreadsheet | null;
   setInstance: React.Dispatch<React.SetStateAction<webix.ui.spreadsheet | null>>;
-  data: SpreadSheetWidgetData | null;
-  setData: React.Dispatch<React.SetStateAction<SpreadSheetWidgetData | null>>;
+  data: SpreadSheetWidgetSheet[] | null;
+  setData: React.Dispatch<React.SetStateAction<SpreadSheetWidgetSheet[] | null>>;
   importExcelFile: (path: string) => void;
+  selectedCells: Cell[];
+  setSelectedCells: (cells: Cell[]) => void;
+  activeSheetName: string | null;
+  setActiveSheetName: (name: string | null) => void;
+  getSpreadSheetData: () => SpreadSheetWidgetSheet[] | null;
 }
 
 export interface SpreadSheetWidgetConfig extends Omit<webix.ui.spreadsheetConfig, 'view'> {
   toolbar?: 'full' | 'default';
 }
 
+/** SpreadSheetWidget data types */
+
+export interface SpreadSheetWidgetSheet {
+  name: string;
+  state: SheetStates;
+  content: SpreadSheetContentData;
+}
+
 // TODO: дописать типы https://docs.webix.com/spreadsheet__loading_data.html
-export interface SpreadSheetWidgetData {
-  data: SpreadSheetWidgetCellData;
+
+export interface SpreadSheetContentData {
+  data: SpreadSheetWidgetCell[];
   styles: SpreadSheetWidgetStyleData;
   sizes: SpreadSheetWidgetSizeData;
   spans: SpreadSheetWidgetSpanData;
@@ -39,9 +65,6 @@ export interface SpreadSheetWidgetData {
   views: unknown;
 }
 
-/** SpreadSheetWidget data types */
-
-export type SpreadSheetWidgetCellData = Array<SpreadSheetWidgetCell>;
 export type SpreadSheetWidgetCell = [
   CellRowNumber,
   CellColNumber,
@@ -49,8 +72,7 @@ export type SpreadSheetWidgetCell = [
   CellCssClass?,
   CellDataType?,
 ];
-type CellRowNumber = number;
-type CellColNumber = number;
+
 type CellContent = string;
 type CellCssClass = string;
 type CellDataType = 'date' | 'number' | 'string';
