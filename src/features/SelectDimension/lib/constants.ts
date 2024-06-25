@@ -19,45 +19,89 @@ import { TreeNode } from './types';
 
 export const treeData: TreeNode[] = [
   {
-    title: 'D1',
-    key: 'D1',
+    title: 'R1',
+    key: 'R1',
     parentKey: null,
     children: [
       {
-        title: 'D1-A',
-        key: 'D1-A',
-        parentKey: 'D1',
+        title: 'R1-A',
+        key: 'R1-A',
+        parentKey: 'R1',
         children: undefined,
       },
       {
-        title: 'D1-B',
-        key: 'D1-B',
-        parentKey: 'D1',
+        title: 'R1-B',
+        key: 'R1-B',
+        parentKey: 'R1',
         children: undefined,
       },
       {
-        title: 'D1-C',
-        key: 'D1-C',
-        parentKey: 'D1',
+        title: 'R1-C',
+        key: 'R1-C',
+        parentKey: 'R1',
         children: undefined,
       },
     ],
   },
   {
-    title: 'D2',
-    key: 'D2',
+    title: 'R2',
+    key: 'R2',
     parentKey: null,
     children: [
       {
-        title: 'D2-A',
-        key: 'D2-A',
-        parentKey: 'D2',
+        title: 'R2-A',
+        key: 'R2-A',
+        parentKey: 'R2',
         children: undefined,
       },
       {
-        title: 'D2-B',
-        key: 'D2-B',
-        parentKey: 'D2',
+        title: 'R2-B',
+        key: 'R2-B',
+        parentKey: 'R2',
+        children: undefined,
+      },
+    ],
+  },
+  {
+    title: 'C1',
+    key: 'C1',
+    parentKey: null,
+    children: [
+      {
+        title: 'C1-A',
+        key: 'C1-A',
+        parentKey: 'C1',
+        children: undefined,
+      },
+      {
+        title: 'C1-B',
+        key: 'C1-B',
+        parentKey: 'C1',
+        children: undefined,
+      },
+      {
+        title: 'C1-C',
+        key: 'C1-C',
+        parentKey: 'C1',
+        children: undefined,
+      },
+    ],
+  },
+  {
+    title: 'C2',
+    key: 'C2',
+    parentKey: null,
+    children: [
+      {
+        title: 'C2-A',
+        key: 'C2-A',
+        parentKey: 'C2',
+        children: undefined,
+      },
+      {
+        title: 'C2-B',
+        key: 'C2-B',
+        parentKey: 'C2',
         children: undefined,
       },
     ],

@@ -61,6 +61,9 @@ export const SpreadSheetWidget = memo(
                   updateActiveSheetName(sheetName);
                   console.log('onAfterSheetShow', { sheetName });
                 },
+                onDataParse: (sheet: unknown) => {
+                  console.log('onDataParse', sheet);
+                },
               },
             });
             updateWidgetInstance(spreadSheetRef.current);

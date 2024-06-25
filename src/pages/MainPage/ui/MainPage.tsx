@@ -5,7 +5,7 @@ import {
   useSpreadSheetWidgetStore,
 } from 'shared/components/SpreadSheetWidget';
 import { useEffect } from 'react';
-import { useSheetStore } from 'entities/sheet';
+import { getCurrentTemplateSheetConfig, useSheetStore } from 'entities/sheet';
 import { IMainPageProps } from '../lib';
 
 import * as styles from './MainPage.module.scss';
@@ -31,21 +31,17 @@ export const MainPage = ({ className }: IMainPageProps) => {
   }, [currentTemplate, spreadSheetData, updateTemplateData]);
 
   useEffect(() => {
-    // TODO: вынести в хуки или в хелперы
-    if (!templateConfigs || !currentTemplate || !spreadSheetWidget) {
+    if (!spreadSheetWidget) {
       return;
     }
-
-    const templateSheetConfigs = templateConfigs?.[currentTemplate.id];
-
-    if (!activeSheetName) {
-      return;
-    }
-
-    const templateSheetConfig = templateSheetConfigs?.[activeSheetName];
+    const templateSheetConfig = getCurrentTemplateSheetConfig(
+      templateConfigs,
+      currentTemplate,
+      activeSheetName
+    );
     const dimensions = templateSheetConfig?.dimensions;
 
-    if (templateSheetConfig && dimensions) {
+    if (dimensions) {
       dimensions.forEach(({ cell, values }) => {
         spreadSheetWidget.setCellEditor(cell.row, cell.column, {
           editor: CellEditorType.SS_RICHSELECT,
