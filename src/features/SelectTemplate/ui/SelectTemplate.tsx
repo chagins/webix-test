@@ -75,7 +75,14 @@ export const SelectTemplate = ({ className }: SelectTemplateProps) => {
 
     if (selectedTemplateData) {
       spreadSheetWidget.parse({
-        sheets: Object.values(selectedTemplateData).map((sheet) => sheet),
+        sheets: Object.values(selectedTemplateData).map((item) => ({
+          ...item,
+          content: {
+            // Проверка возможности сохранение элемента массива данных ячейки
+            ...item.content,
+            data: item.content.data.map((dataItem) => [...dataItem, { myCustomData: 'lalala' }]),
+          },
+        })),
       });
     } else {
       importExcelFile(selectedTemplate);

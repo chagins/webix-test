@@ -1,4 +1,5 @@
 export { useSheetStore } from './hooks';
+export { getCurrentTemplateSheetConfig } from './lib';
 export type {
   TemplateId,
   Template,
