@@ -53,9 +53,7 @@ export const LoadTemplates = ({ className }: LoadTemplatesProps) => {
     }
 
     setIsLoading(true);
-    spreadSheetWidget?.disable();
     await fetchTemplates(templatePath);
-    spreadSheetWidget?.enable();
     setIsLoading(false);
   };
 

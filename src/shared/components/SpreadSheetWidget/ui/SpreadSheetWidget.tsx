@@ -6,6 +6,10 @@ import {
   Cell,
   SpreadSheetWidgetSheet,
   SpreadSheetSerializeConfig,
+  SpreadSheetWidgetRange,
+  defaultRangeStyleProps,
+  dataAreaRangeStyleProps,
+  addStyle,
 } from '../lib';
 
 import './SpreadSheetWidget.scss';
@@ -22,6 +26,8 @@ export const SpreadSheetWidget = memo(
     const updateData = useSpreadSheetWidgetStore.use.updateData();
     const updateSelectedCells = useSpreadSheetWidgetStore.use.updateSelectedCells();
     const updateActiveSheetName = useSpreadSheetWidgetStore.use.updateActiveSheetName();
+    const updateLastRangeSet = useSpreadSheetWidgetStore.use.updateLastRangeSet();
+    const updateRangeStyle = useSpreadSheetWidgetStore.use.updateRangeStyle();
 
     const containerRef = useRef<HTMLDivElement>(null);
     const spreadSheetRef = useRef<null | webix.ui.spreadsheet>(null);
@@ -46,6 +52,19 @@ export const SpreadSheetWidget = memo(
                     spreadSheetRef.current?.serialize(SpreadSheetSerializeConfig) || null;
                   // updateImportData(data as SpreadSheetWidgetSheet[] | null);
                   updateData(data as SpreadSheetWidgetSheet[] | null);
+
+                  if (spreadSheetRef.current) {
+                    const defaultRangeStyle = addStyle(
+                      spreadSheetRef.current,
+                      defaultRangeStyleProps
+                    );
+                    const dataAreaRangeStyle = addStyle(
+                      spreadSheetRef.current,
+                      dataAreaRangeStyleProps
+                    );
+                    updateRangeStyle(defaultRangeStyle, dataAreaRangeStyle);
+                  }
+
                   console.log('onAfterLoad', { data });
                 },
                 onChange: (mode: ChangeModes, name: string, oldName: string) => {
@@ -64,6 +83,10 @@ export const SpreadSheetWidget = memo(
                 onDataParse: (sheet: unknown) => {
                   console.log('onDataParse', sheet);
                 },
+                onAfterRangeSet: (...range: SpreadSheetWidgetRange) => {
+                  updateLastRangeSet(range);
+                  console.log('onAfterRangeSet', range);
+                },
               },
             });
             updateWidgetInstance(spreadSheetRef.current);
@@ -73,11 +96,12 @@ export const SpreadSheetWidget = memo(
         }
       });
     }, [
-      updateData,
-      // updateImportData,
-      updateSelectedCells,
       updateWidgetInstance,
+      updateRangeStyle,
+      updateData,
+      updateSelectedCells,
       updateActiveSheetName,
+      updateLastRangeSet,
     ]);
 
     useEffect(() => {

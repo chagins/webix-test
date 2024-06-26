@@ -1,5 +1,6 @@
 import { SpreadSheetWidgetSheet } from 'shared/components/SpreadSheetWidget';
 import {
+  DataArea,
   Dimension,
   SheetName,
   Template,
@@ -24,9 +25,14 @@ export type SheetAction = {
   updateCurrentTemplate: (templateId: TemplateId) => void;
   updateTemplatePath: (path: string | null) => void;
   updateTemplateData: (templateId: TemplateId, data: SpreadSheetWidgetSheet[]) => void;
-  updateTemplateConfigs: (
+  updateTemplateDimensionConfigs: (
     templateId: TemplateId,
     sheetName: SheetName,
     dimensions: Dimension[]
+  ) => void;
+  updateTemplateDataAreaConfigs: (
+    templateId: TemplateId,
+    sheetName: SheetName,
+    dataArea: DataArea
   ) => void;
 };

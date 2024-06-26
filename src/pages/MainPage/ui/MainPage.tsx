@@ -4,7 +4,7 @@ import {
   SpreadSheetWidget,
   useSpreadSheetWidgetStore,
 } from 'shared/components/SpreadSheetWidget';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCurrentTemplateSheetConfig, useSheetStore } from 'entities/sheet';
 import { IMainPageProps } from '../lib';
 
@@ -23,6 +23,15 @@ export const MainPage = ({ className }: IMainPageProps) => {
   const templateConfigs = useSheetStore.use.templateConfigs();
 
   console.log('templateData', { templateData });
+  console.log('spreadSheetData', { spreadSheetData });
+
+  useEffect(() => {
+    if (!currentTemplate) {
+      spreadSheetWidget?.disable();
+    } else {
+      spreadSheetWidget?.enable();
+    }
+  }, [currentTemplate, spreadSheetWidget]);
 
   useEffect(() => {
     if (spreadSheetData && currentTemplate) {

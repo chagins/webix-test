@@ -11,6 +11,10 @@ export const defaultThemeData: ThemeConfig = {
     Button: {
       colorTextDisabled: '#aaaaaa',
     },
+    Checkbox: {
+      colorText: '#ffffff',
+      colorTextDisabled: '#dddddd',
+    },
   },
 };
 
