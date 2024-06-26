@@ -29,3 +29,11 @@ export const SpreadSheetSerializeConfig: webix.WebixSpreadsheetSerializeConfig =
   math: true,
   sheets: true,
 };
+
+export const defaultRangeStyleProps: webix.WebixSpreadsheetStyleProps = {
+  background: '',
+};
+
+export const dataAreaRangeStyleProps: webix.WebixSpreadsheetStyleProps = {
+  background: '#b7f7f1',
+};

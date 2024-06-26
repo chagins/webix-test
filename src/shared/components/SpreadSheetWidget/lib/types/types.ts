@@ -91,7 +91,7 @@ type SpreadSheetWidgetStyleName = string;
  *  example: ";#6E6EFF;center;;;;;;;;;"
  *
  */
-type SpreadSheetWidgetStyleString = string;
+export type SpreadSheetWidgetStyleString = string;
 
 /** SpreadSheetWidget sizes types */
 
@@ -147,3 +147,21 @@ type ConditionRule =
   | 'notEndsWith';
 type ConditionCompareValue = number;
 type ConditionSatisfiedCssClass = string;
+
+/** Spreadsheet range types */
+
+export type SpreadSheetWidgetRangesData = Array<SpreadSheetWidgetRange>;
+export type SpreadSheetWidgetRange = [RangeName, RangeCodeWithSheetName, IsRangeGLobal];
+type RangeName = string;
+/** @example "Sheet1!A2:D5" */
+export type RangeCodeWithSheetName = string;
+/** @example "A2:D5" */
+export type RangeCode = string;
+type IsRangeGLobal = boolean;
+
+/** webix range object type */
+export interface WebixRangeObj {
+  name: string;
+  range: RangeCodeWithSheetName;
+  global: IsRangeGLobal;
+}

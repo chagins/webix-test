@@ -1,4 +1,4 @@
-import { Cell, SpreadSheetWidgetSheet } from './types';
+import { Cell, SpreadSheetWidgetRange, SpreadSheetWidgetSheet } from './types';
 
 export type SpreadSheetWidgetState = {
   widgetInstance: webix.ui.spreadsheet | null;
@@ -6,6 +6,11 @@ export type SpreadSheetWidgetState = {
   importData: SpreadSheetWidgetSheet[] | null;
   selectedCells: Cell[];
   activeSheetName: string | null;
+  lastRangeSet: SpreadSheetWidgetRange | null;
+  range: {
+    dataAreaRangeStyle: webix.WebixSpreadsheetStyle;
+    defaultRangeStyle: webix.WebixSpreadsheetStyle;
+  } | null;
 };
 
 export type SpreadSheetWidgetAction = {
@@ -14,4 +19,9 @@ export type SpreadSheetWidgetAction = {
   updateImportData: (newData: SpreadSheetWidgetSheet[] | null) => void;
   updateSelectedCells: (cells: Cell[]) => void;
   updateActiveSheetName: (name: string | null) => void;
+  updateLastRangeSet: (range: SpreadSheetWidgetRange) => void;
+  updateRangeStyle: (
+    defaultRangeStyle: webix.WebixSpreadsheetStyle,
+    dataAreaRangeStyle: webix.WebixSpreadsheetStyle
+  ) => void;
 };

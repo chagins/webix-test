@@ -33,7 +33,7 @@ export const useSheetStoreBase = create<SheetState & SheetAction>()((set) => ({
         },
       };
     }),
-  updateTemplateConfigs: (templateId, sheetName, newDimensions) =>
+  updateTemplateDimensionConfigs: (templateId, sheetName, newDimensions) =>
     set((state) => {
       const currentConfig = state.templateConfigs?.[templateId];
       const currentSheetConfigs = currentConfig?.[sheetName];
@@ -60,7 +60,27 @@ export const useSheetStoreBase = create<SheetState & SheetAction>()((set) => ({
           [templateId]: {
             ...currentConfig,
             [sheetName]: {
+              ...currentSheetConfigs,
               dimensions: updatedDimensions,
+            },
+          },
+        },
+      };
+    }),
+  updateTemplateDataAreaConfigs: (templateId, sheetName, dataArea) =>
+    set((state) => {
+      const currentConfig = state.templateConfigs?.[templateId];
+      const currentSheetConfigs = currentConfig?.[sheetName];
+      const currentDataAreas = currentSheetConfigs?.dataAreas || [];
+
+      return {
+        templateConfigs: {
+          ...state.templateConfigs,
+          [templateId]: {
+            ...currentConfig,
+            [sheetName]: {
+              ...currentSheetConfigs,
+              dataAreas: [...currentDataAreas, dataArea],
             },
           },
         },

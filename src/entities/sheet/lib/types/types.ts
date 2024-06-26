@@ -1,5 +1,7 @@
 import {
   Cell,
+  RangeCode,
+  RangeCodeWithSheetName,
   SpreadSheetDatatype,
   SpreadSheetWidgetSheet,
 } from 'shared/components/SpreadSheetWidget';
@@ -28,7 +30,8 @@ export type TemplateSheets = Record<SheetName, SpreadSheetWidgetSheet>;
 export type TemplateConfigs = Record<TemplateId, TemplateSheetConfigs>;
 export type TemplateSheetConfigs = Record<SheetName, TemplateSheetConfig>;
 export interface TemplateSheetConfig {
-  dimensions: Dimension[];
+  dimensions?: Dimension[];
+  dataAreas?: DataArea[];
 }
 
 export type DimensionId = string;
@@ -36,4 +39,12 @@ export interface Dimension {
   id: DimensionId;
   values: string[];
   cell: Cell;
+}
+
+export interface DataArea {
+  name: string;
+  rangeCodeWithSheetName: RangeCodeWithSheetName;
+  rangeCode: RangeCode;
+  cells: Cell[];
+  dimensions: Dimension[];
 }

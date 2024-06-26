@@ -18,7 +18,7 @@ export const SelectDimension = ({ className }: SelectDimensionProps) => {
   const selectedCells = useSpreadSheetWidgetStore.use.selectedCells();
   const activeSheetName = useSpreadSheetWidgetStore.use.activeSheetName();
 
-  const updateTemplateConfig = useSheetStore.use.updateTemplateConfigs();
+  const updateTemplateConfig = useSheetStore.use.updateTemplateDimensionConfigs();
   const currentTemplate = useSheetStore.use.currentTemplate();
   const templateConfigs = useSheetStore.use.templateConfigs();
 
