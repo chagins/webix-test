@@ -38,14 +38,26 @@ export const SpreadSheetWidget = memo(
           try {
             const container = containerRef.current;
             const view = 'spreadsheet';
+            // const view = 'CustomSpreadSheet';
             const config: SpreadSheetWidgetConfig = {
               toolbar: 'full',
             };
+
+            // webix.protoUI(
+            //   {
+            //     name: view,
+            //   },
+            //   webix.ValidateData,
+            //   webix.ui.spreadsheet
+            // );
 
             spreadSheetRef.current = webix.ui<webix.ui.spreadsheet>({
               ...config,
               view,
               container,
+              rules: {
+                email: webix.rules.isEmail,
+              },
               on: {
                 onAfterLoad: () => {
                   const data =
