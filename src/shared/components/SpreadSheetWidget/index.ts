@@ -8,5 +8,7 @@ export type {
   RangeCodeWithSheetName,
   RangeCode,
   WebixRangeObj,
+  SpreadSheetContentData,
+  SpreadSheetWidgetCell,
 } from './lib';
 export { useSpreadSheetWidgetStore } from './hooks';

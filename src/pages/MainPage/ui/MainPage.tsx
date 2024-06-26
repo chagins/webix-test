@@ -12,8 +12,6 @@ import * as styles from './MainPage.module.scss';
 
 export const MainPage = ({ className }: IMainPageProps) => {
   const spreadSheetWidget = useSpreadSheetWidgetStore.use.widgetInstance();
-  const spreadSheetImportData = useSpreadSheetWidgetStore.use.importData();
-  const updateSpreadSheetImportData = useSpreadSheetWidgetStore.use.updateImportData();
   const spreadSheetData = useSpreadSheetWidgetStore.use.data();
 
   const activeSheetName = useSpreadSheetWidgetStore.use.activeSheetName();
