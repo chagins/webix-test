@@ -4,6 +4,8 @@ import {
   RangeCodeWithSheetName,
   SpreadSheetDatatype,
   SpreadSheetWidgetSheet,
+  SpreadSheetContentData,
+  SpreadSheetWidgetCell,
 } from 'shared/components/SpreadSheetWidget';
 
 /** Templates types */
@@ -48,3 +50,9 @@ export interface DataArea {
   cells: Cell[];
   dimensions: Dimension[];
 }
+
+/** Template separate data types */
+
+export type TemplateSeparateData = Record<TemplateId, TemplateSeparateDataSheets>;
+export type TemplateSeparateDataSheets = Record<SheetName, SheetContentData>;
+export type SheetContentData = Pick<SpreadSheetContentData, 'data'>;

@@ -1,6 +1,7 @@
 import { Layout, Space } from 'antd';
 import { SelectDimension } from 'features/SelectDimension';
 import { SelectDataArea } from 'features/SelectDataArea';
+import { LoadData } from 'features/LoadData';
 
 import * as styles from './Sidebar.module.scss';
 
@@ -15,6 +16,7 @@ export const Sidebar = () => {
         {dataAreas.map((name) => (
           <SelectDataArea rangeName={name} key={name} />
         ))}
+        <LoadData dataPath="/data.json" />
       </Space>
     </Sider>
   );

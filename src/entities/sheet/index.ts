@@ -10,4 +10,5 @@ export type {
   SheetState,
   SheetAction,
   Dimension,
+  TemplateSeparateData,
 } from './lib';
