@@ -8,12 +8,7 @@ import {
   parseRange,
   useSpreadSheetWidgetStore,
 } from 'shared/components/SpreadSheetWidget';
-import {
-  SelectDataAreaProps,
-  checkIsCellInRange,
-  findDimensionsForDataArea,
-  getNamedRangeByCells,
-} from '../lib';
+import { SelectDataAreaProps, findDimensionsForDataArea, getNamedRangeByCells } from '../lib';
 
 import * as styles from './SelectDataArea.module.scss';
 

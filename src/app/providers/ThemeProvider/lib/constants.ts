@@ -15,6 +15,10 @@ export const defaultThemeData: ThemeConfig = {
       colorText: '#ffffff',
       colorTextDisabled: '#dddddd',
     },
+    Radio: {
+      colorText: '#ffffff',
+      colorTextDisabled: '#dddddd',
+    },
   },
 };
 

@@ -73,7 +73,7 @@ export type SpreadSheetWidgetCell = [
   CellDataType?,
 ];
 
-type CellContent = string;
+export type CellContent = string;
 type CellCssClass = string;
 type CellDataType = 'date' | 'number' | 'string';
 
