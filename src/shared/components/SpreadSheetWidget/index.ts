@@ -10,5 +10,6 @@ export type {
   WebixRangeObj,
   SpreadSheetContentData,
   SpreadSheetWidgetCell,
+  CellContent,
 } from './lib';
 export { useSpreadSheetWidgetStore } from './hooks';
